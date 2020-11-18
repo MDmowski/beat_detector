@@ -11,6 +11,9 @@ Projekt realizowany w ramach przdmiotu SCZR (realizacja 20Z) przez zespół:
 # Opis projektu
 Projekt jest systemem czasu rzeczywistego realizującym obsługę oraz anlizę plików audio. Poszczególne procesy działają zgodnie z diagramem oraz szczegółowym opisem poniżej. Projekt przy pomocy RPI odtwarza oraz analizuje na bieżąco plik audio, wyświetlając przy pomocy diód LED tempo (BPM) oraz spektrogram. Techniczne szczegóły implementacji opisane są w dalszych sekcjach tego pliku.
 
+# Link do repozytorium
+https://gitlab-stud.elka.pw.edu.pl/jstrawa/projekt-sczr
+
 # Diagram procesów
 
 ![Diagram](https://codimd.s3.shivering-isles.com/demo/uploads/upload_a0940b2c83b633d3d8d812372599bddd.png)
