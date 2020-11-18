@@ -53,13 +53,7 @@ Komunikacja między procesami odbywać się będzie za pomocą kolejek komunikat
         struct msg_buf_12 {
             unsigned int id;
             data;
-        }du elektrycznego łączego diody z urządzeniem
-* Przeprowadzenie eksperymentów
-
-
-# Planowane eksprymenty
-Początkowo zakładamy brak jakiejkolwiek ingerencji w sposób działania systemu. Pierwszym eksperymentem będzie zatem porównanie działania diody do rzeczywistego słyszalnego tempa. Zmierzone opóźnienia wykorzystamy do określenia jakości synchronizacji. Uzyskane w ten sposób dane porównamy z danymi uzyskanymi z logów otrzymywanych przez zarządcę procesów. Następnym krokiem będzie próba dostrojenia systemu (zmniejszenia opóźnień) poprzez dobór priorytetów dla procesów metodą eksperymentalną. Dla każdej takiej próby wykonany zostanie eksperyment mający na celu jakość dostrojenia. Jeśli zaś ta metoda. zawiedzie, kolejnym planowanym eksperymentem będzie przydzielenie każdemu procesowi własny rdzeń procesora. Następnie powtórzony zostanie eksperyment polegający na porównaniu działania diody do słyszalnego tempa.
-Jeśli zaś zauważymy, że narzut czasowy związany z kopiowaniem danych do i z kolejki komunikatów będzie duży, przetestujemy przekazywanie danych przez pamięć współdzieloną. 
+        } 
     ```
 2. message_queue_23
     Przesył wykrytego rytmu.
@@ -97,4 +91,10 @@ Jeśli zaś zauważymy, że narzut czasowy związany z kopiowaniem danych do i z
 * Utworzenie procesu 3
 * Konfiguracja RPI
 * Przygotowanie i przesłanie odpowiednich sygnałów na diody
-* Zaprojektowanie ukÅ
+* Zaprojektowanie układu elektrycznego łączego diody z urządzeniem
+* Przeprowadzenie eksperymentów
+
+
+# Planowane eksprymenty
+Początkowo zakładamy brak jakiejkolwiek ingerencji w sposób działania systemu. Pierwszym eksperymentem będzie zatem porównanie działania diody do rzeczywistego słyszalnego tempa. Zmierzone opóźnienia wykorzystamy do określenia jakości synchronizacji. Uzyskane w ten sposób dane porównamy z danymi uzyskanymi z logów otrzymywanych przez zarządcę procesów. Następnym krokiem będzie próba dostrojenia systemu (zmniejszenia opóźnień) poprzez dobór priorytetów dla procesów metodą eksperymentalną. Dla każdej takiej próby wykonany zostanie eksperyment mający na celu jakość dostrojenia. Jeśli zaś ta metoda. zawiedzie, kolejnym planowanym eksperymentem będzie przydzielenie każdemu procesowi własny rdzeń procesora. Następnie powtórzony zostanie eksperyment polegający na porównaniu działania diody do słyszalnego tempa.
+Jeśli zaś zauważymy, że narzut czasowy związany z kopiowaniem danych do i z kolejki komunikatów będzie duży, przetestujemy przekazywanie danych przez pamięć współdzieloną.
