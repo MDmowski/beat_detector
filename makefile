@@ -1,7 +1,7 @@
 CC=gcc
-FLAGS=-W
+CFLAGS=-W
 
 %.o: %.c
-	$(CC) -o $@ $<
+	$(CC) -o $@ $< -lrt
 
 all: master.o p1.o
