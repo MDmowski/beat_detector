@@ -28,12 +28,17 @@ int main()
         handle_error("mq_open(LOG_MSG_QUEUE_1)");
 
     struct log_msg msg;
-    msg.msg_id = 0;
 
-    if(mq_send(mqd, (const char *)&msg, sizeof(struct log_msg), 1) == -1)
-        handle_error("mq_send");
+    for(int i = 0; i < 5; i++)
+    {
+        printf("Sending msg %d\n", i);
+        msg.msg_id = i;
+        if(mq_send(mqd, (const char *)&msg, sizeof(struct log_msg), 1) == -1)
+            handle_error("mq_send");
+        sleep(0.1);
+    }
 
-    mq_unlink("/LOG_MSG_QUEUE_1");
+    mq_close(mqd);
 
     printf("p1\n");
 

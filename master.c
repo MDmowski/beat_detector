@@ -13,6 +13,8 @@
 #define handle_error(msg) \
     do { perror(msg); exit(EXIT_FAILURE); } while (0)
 
+void mq_notify_wrapper(mqd_t *mqd_ptr);
+
 struct log_msg
 {
     unsigned int msg_id;
@@ -22,10 +24,21 @@ struct log_msg
 
 static void read_msg(union sigval sv)
 {
+    printf("Received signal.\n");
     struct mq_attr attr;
     ssize_t bytes_received;
     char *log_msg_buf;
     mqd_t mqd = *((mqd_t *) sv.sival_ptr);
+
+    // Register for notify again
+    // Can't user wrapper because of error: device busy
+    struct sigevent sev;
+    sev.sigev_notify = SIGEV_THREAD;
+    sev.sigev_notify_function = &read_msg;
+    sev.sigev_notify_attributes = NULL;
+    sev.sigev_value.sival_ptr = sv.sival_ptr; 
+    if (mq_notify(mqd, &sev) == -1)
+        handle_error("mq_notify");
 
     if (mq_getattr(mqd, &attr) == -1)
         handle_error("mq_getattr");
@@ -33,11 +46,20 @@ static void read_msg(union sigval sv)
     if (log_msg_buf == NULL)
         handle_error("malloc");
 
-    bytes_received = mq_receive(mqd, log_msg_buf, attr.mq_msgsize, NULL);
-    if (bytes_received != sizeof(struct log_msg))
-        handle_error("mq_receive");
+    while(1)
+    {
+        bytes_received = mq_receive(mqd, log_msg_buf, attr.mq_msgsize, NULL);
+        if (bytes_received != sizeof(struct log_msg))
+        {
+            if (errno != EAGAIN)
+                handle_error("mq_receive");
+            else
+                break;
+        }
+            
+        printf("Read %zd bytes from MQ: %u\n", bytes_received, ((struct log_msg *) log_msg_buf)->msg_id);
+    }
 
-    printf("Read %zd bytes from MQ: %u\n", bytes_received, ((struct log_msg *) log_msg_buf)->msg_id);
     free(log_msg_buf);
 }
 
@@ -53,9 +75,11 @@ void mq_notify_wrapper(mqd_t *mqd_ptr)
         handle_error("mq_notify");
 }
 
+
+
 mqd_t mq_open_wrapper(const char *name)
 {
-    mqd_t mqd = mq_open(name, O_CREAT | O_EXCL | O_RDONLY, S_IRUSR | S_IWUSR, NULL);
+    mqd_t mqd = mq_open(name, O_CREAT | O_EXCL | O_RDONLY | O_NONBLOCK, S_IRUSR | S_IWUSR, NULL);
     if(mqd == (mqd) -1)
         handle_error("mq_open(LOG_MSG_QUEUE_1)");
 
@@ -77,7 +101,9 @@ int main()
     int status;
     wait(&status);
 
+    sleep(2);
     mq_close(mqd_log_1);
+    mq_unlink("/LOG_MSG_QUEUE_1");
 
     printf("parent end\n");
 }
