@@ -9,7 +9,6 @@
 #include <signal.h>
 #include <errno.h>
 #include <sys/stat.h>
-
 #define handle_error(msg) \
     do { perror(msg); exit(EXIT_FAILURE); } while (0)
 
@@ -17,9 +16,7 @@ void mq_notify_wrapper(mqd_t *mqd_ptr);
 
 struct log_msg
 {
-    unsigned int msg_id;
-    struct timeval tv;
-    enum MsgType {RECEIVED, SENT} type;
+  float samples[4096];
 };
 
 static void read_msg(union sigval sv)
@@ -64,7 +61,7 @@ static void read_msg(union sigval sv)
         log_msg_buf = (struct log_msg *) buf;
 
         // Simple log, delete later
-        printf("Read %zd bytes from MQ: %u\n", bytes_received, log_msg_buf->msg_id);
+        //printf("Read %zd bytes from MQ: %u\n", bytes_received, log_msg_buf->msg_id);
     }
 
     free(log_msg_buf);
@@ -84,7 +81,7 @@ void mq_notify_wrapper(mqd_t *mqd_ptr)
 
 mqd_t mq_open_wrapper(const char *name)
 {
-    mqd_t mqd = mq_open(name, O_CREAT | O_EXCL | O_RDONLY | O_NONBLOCK, S_IRUSR | S_IWUSR, NULL);
+    mqd_t mqd = mq_open(name, O_CREAT | O_EXCL | O_RDWR , S_IRUSR | S_IWUSR, NULL);
     if(mqd == (mqd) -1)
         handle_error("mq_open");
 
@@ -95,21 +92,28 @@ int main()
 {
     printf("parent start\n");
 
-    mqd_t mqd_log_1 = mq_open_wrapper("/LOG_MSG_QUEUE_1");
-    mq_notify_wrapper(&mqd_log_1);
-
+    mqd_t mqd_log_1 = mq_open_wrapper("/TEST");
+    if(mqd_log_1 == -1)
+	    perror("Open:");
+    //mq_notify_wrapper(mqd_log_1);
+    float msg[4096];
+    while(1){
+	size_t size = mq_receive(mqd_log_1, msg, sizeof(float)*4096, NULL);
+	printf("%s\n",msg);
+    }
     // Create first process
-    pid_t pid = fork();
-    if( pid == 0)
-        execve("./p1.o", NULL, NULL);
-
-
+    pid_t pid2 = fork();
+    char* argv[] = {"./playback","../../test2.wav", NULL};
+    if( pid2 == 0){
+       if( execve("./playback", argv, NULL)==-1)
+	printf("Couldn't open");
+    }
     // TODO: Add waiting for all children
     int status;
     wait(&status);
 
     mq_close(mqd_log_1);
-    mq_unlink("/LOG_MSG_QUEUE_1");
+    mq_unlink("/MSG_QUEUE_1");
 
     printf("parent end\n");
 }
