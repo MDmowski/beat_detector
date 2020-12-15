@@ -27,7 +27,7 @@
 #endif
 
 #ifdef USE_KISS_FFT
-#include "kiss_fft.h"
+#include "kiss_fft/kiss_fft.h"
 #endif
 
 #include <vector>
