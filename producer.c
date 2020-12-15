@@ -25,6 +25,7 @@ the simple_mixing example for how best to do this.
 #include <errno.h>
 #include <sys/stat.h>
 
+ma_event g_stopEvent;
 
 void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount)
 {
@@ -36,20 +37,19 @@ void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uin
     mqd_t queue = mq_open("/TEST", O_RDWR, S_IRUSR | S_IWUSR, NULL);
     if(queue == -1)
 	    printf("error opening: %s\n", strerror(errno));
-    else
-	    printf("succesfull opening\n");
     uint frames = ma_decoder_read_pcm_frames(pDecoder, pOutput, frameCount);
-    if(mq_send(queue, pOutput, sizeof(float)*frames*2, 1) == -1)
+    printf("Sending %d frames\n",frames);
+    if(mq_send(queue, pOutput, sizeof(float)*frames, 1) == -1)
 	 printf("error sending: %s\n", strerror(errno));
-    else
-	    printf("succesful send\n");
     mq_close(queue);
     (void)pInput;
+    if (frames < frameCount) {
+    	ma_event_signal(&g_stopEvent);        
+    }
 }
 
 int main(int argc, char** argv)
 {
-    printf("%s", argv[1]);
     ma_result result;
     ma_decoder decoder;
     ma_device_config deviceConfig;
@@ -72,6 +72,7 @@ int main(int argc, char** argv)
     deviceConfig.dataCallback      = data_callback;
     deviceConfig.pUserData         = &decoder;
 
+    ma_event_init(&g_stopEvent);
     if (ma_device_init(NULL, &deviceConfig, &device) != MA_SUCCESS) {
         printf("Failed to open playback device.\n");
         ma_decoder_uninit(&decoder);
@@ -85,8 +86,7 @@ int main(int argc, char** argv)
         return -4;
     }
 
-    printf("Press Enter to quit...");
-    getchar();
+    ma_event_wait(&g_stopEvent);
 
     ma_device_uninit(&device);
     ma_decoder_uninit(&decoder);
