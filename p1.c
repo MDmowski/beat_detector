@@ -21,6 +21,8 @@
 mqd_t mqd_1;
 ma_event g_stopEvent;
 
+struct p1_msg new_msg;
+
 void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount)
 {
     ma_decoder* pDecoder = (ma_decoder*)pDevice->pUserData;
@@ -29,15 +31,11 @@ void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uin
     }
 
     struct log_msg log;
-    struct p1_msg new_msg;
 
     printf("Total frames: %d\n", frameCount);
     uint frames = ma_decoder_read_pcm_frames(pDecoder, pOutput, frameCount);
 
-
-    // Fill in new_msg
-
-    if(mq_send(mqd_1, (const char *)&new_msg, sizeof(struct p1_msg), 1) == -1)
+    if(mq_send(mqd_1, (const char *)pOutput, sizeof(float) * frames, 1) == -1)
         handle_error("mq_send");
 
     (void)pInput;
@@ -54,6 +52,7 @@ int main(int argc, char **argv)
     mqd_1 = mq_open("/MSG_QUEUE_1", O_WRONLY, S_IRUSR | S_IWUSR, NULL);
     if(mqd_1 == (mqd_t) -1)
         handle_error("mq_open");
+
 
     printf("%s", argv[1]);
     ma_result result;

@@ -40,20 +40,17 @@ int main()
     while(1){
 
         ssize_t bytes_received = mq_receive(mqd_1, buf, attr.mq_msgsize, NULL);
-        if (bytes_received != sizeof(struct p1_msg))
-                handle_error("mq_receive");
+        printf("P2 bytes: %d\n", bytes_received);
 
-        struct p1_msg *received_msg = (struct p1_msg *) buf;
         printf("P2 got message\n");
-        
-        // Process data
-        struct p2_msg new_msg;
 
+        // Proccess data
+        
         // Send new data
         /* if(mq_send(mqd_2, (const char *)&new_msg, sizeof(struct p2_msg), 1) == -1) */
         /*     handle_error("mq_send"); */
 
-        sleep(0.5);
+        /* sleep(0.5); */
     }
 
     mq_close(mqd_log);

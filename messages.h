@@ -12,9 +12,10 @@ struct log_msg
     enum MsgType {RECEIVED, SENT} type;
 };
 
+
 struct p1_msg
 {
-    float frame[2048];
+    float *frame;
     int framesNumber;
 
 };
