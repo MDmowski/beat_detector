@@ -15,6 +15,10 @@
 
 #include "messages.h"
 
+#define SAMPLE_FORMAT   ma_format_f32
+#define CHANNEL_COUNT   1
+#define SAMPLE_RATE     48000
+
 #define handle_error(msg) \
     do { perror(msg); exit(EXIT_FAILURE); } while (0)
 
@@ -56,6 +60,7 @@ int main(int argc, char **argv)
 
     printf("%s", argv[1]);
     ma_result result;
+    ma_decoder_config decoderConfig;
     ma_decoder decoder;
     ma_device_config deviceConfig;
     ma_device device;
@@ -65,10 +70,13 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    result = ma_decoder_init_file(argv[1], NULL, &decoder);
+    decoderConfig = ma_decoder_config_init(SAMPLE_FORMAT, CHANNEL_COUNT, SAMPLE_RATE);
+    result = ma_decoder_init_file(argv[1], &decoderConfig, &decoder);
     if (result != MA_SUCCESS) {
         return -2;
     }
+
+    printf("\n\nFormat: %d\n", decoder.outputFormat);
 
     deviceConfig = ma_device_config_init(ma_device_type_playback);
     deviceConfig.playback.format   = decoder.outputFormat;
