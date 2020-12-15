@@ -50,8 +50,8 @@ int main()
         struct p2_msg new_msg;
 
         // Send new data
-        if(mq_send(mqd_2, (const char *)&new_msg, sizeof(struct p2_msg), 1) == -1)
-            handle_error("mq_send");
+        /* if(mq_send(mqd_2, (const char *)&new_msg, sizeof(struct p2_msg), 1) == -1) */
+        /*     handle_error("mq_send"); */
 
         sleep(0.5);
     }

@@ -1,22 +1,18 @@
 CC=gcc
 CFLAGS=-Wall -pedantic
 LDFLAGS=-lrt
-AUDIOFLAGS=-lm -ldl -lpthread
+AUDIOFLAGS=-lpthread -lm -ldl 
 
 all: master.o p1.o p2.o
 
 p1.o: p1.c
-	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS)
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(AUDIOFLAGS)
 
 p2.o: p2.c
-	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS)
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) 
 
 master.o: master.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS)
-
-producer.o: producer.c
-	$(CC) -o $@ $< $(CFLAGS) $(AUDIOFLAGS) $(LDFLAGS) 
-
 
 clean:
 	rm *.o

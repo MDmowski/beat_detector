@@ -57,11 +57,7 @@ static void read_msg(union sigval sv)
         log_msg_buf = (struct log_msg *) buf;
 
         // Simple log, delete later
-<<<<<<< HEAD
         printf("Read %zd bytes from MQ: %u\n", bytes_received, log_msg_buf->sender);
-=======
-        //printf("Read %zd bytes from MQ: %u\n", bytes_received, log_msg_buf->msg_id);
->>>>>>> producer-develop
     }
 
     free(log_msg_buf);
@@ -79,16 +75,8 @@ int main()
     mq_unlink("/MSG_QUEUE_1");
     mq_unlink("/MSG_QUEUE_2");
 
-<<<<<<< HEAD
     mqd_t mqd_log_1 = mq_create_log_wrapper("/LOG_MSG_QUEUE_1");
     mq_notify_wrapper(&mqd_log_1, &read_msg);
-=======
-mqd_t mq_open_wrapper(const char *name)
-{
-    mqd_t mqd = mq_open(name, O_CREAT | O_EXCL | O_RDWR , S_IRUSR | S_IWUSR, NULL);
-    if(mqd == (mqd) -1)
-        handle_error("mq_open");
->>>>>>> producer-develop
 
     mqd_t mqd_log_2 = mq_create_log_wrapper("/LOG_MSG_QUEUE_2");
     mq_notify_wrapper(&mqd_log_2, &read_msg);
@@ -96,42 +84,24 @@ mqd_t mq_open_wrapper(const char *name)
     mqd_t mqd_log_3 = mq_create_log_wrapper("/LOG_MSG_QUEUE_3");
     mq_notify_wrapper(&mqd_log_3, &read_msg);
 
-<<<<<<< HEAD
     mq_create_wrapper("/MSG_QUEUE_1");
     mq_create_wrapper("/MSG_QUEUE_2");
 
     // Create first process
     pid_t pid = fork();
     if( pid == 0){
-        execve("./p1.o", NULL, NULL);
-        printf("execve error\n");
+        char *argv[] = {"./p1.o", "test2.wav", NULL};
+        execve("./p1.o", argv, NULL);
+        handle_error("execve");
     }
 
     pid = fork();
     if( pid == 0){
         execve("./p2.o", NULL, NULL);
-        printf("execve error\n");
+        handle_error("execve");
     }
 
 
-=======
-    mqd_t mqd_log_1 = mq_open_wrapper("/TEST");
-    if(mqd_log_1 == -1)
-	    perror("Open:");
-    //mq_notify_wrapper(mqd_log_1);
-    float msg[4096];
-    while(1){
-	size_t size = mq_receive(mqd_log_1, msg, sizeof(float)*4096, NULL);
-	printf("%s\n",msg);
-    }
-    // Create first process
-    pid_t pid2 = fork();
-    char* argv[] = {"./playback","../../test2.wav", NULL};
-    if( pid2 == 0){
-       if( execve("./playback", argv, NULL)==-1)
-	printf("Couldn't open");
-    }
->>>>>>> producer-develop
     // TODO: Add waiting for all children
     int status;
     wait(&status);
