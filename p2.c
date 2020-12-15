@@ -10,10 +10,28 @@
 #include <errno.h>
 #include <sys/stat.h>
 
-#include "messages.h"
+/* #include "messages.h" */
+#include "BTrack/BTrack.h"
 
 #define handle_error(msg) \
     do { perror(msg); exit(EXIT_FAILURE); } while (0)
+
+struct log_msg
+{
+    unsigned int msg_id;
+    unsigned char sender;
+    struct timeval tv;
+    enum MsgType {RECEIVED, SENT} type;
+};
+
+mqd_t mq_open_log_wrapper(const char *name)
+{
+    mqd_t mqd = mq_open(name, O_WRONLY, S_IRUSR | S_IWUSR, NULL);
+    if(mqd == (mqd_t) -1)
+        handle_error("mq_open");
+
+    return mqd;
+}
 
 int main()
 {
@@ -33,13 +51,17 @@ int main()
     if (mq_getattr(mqd_1, &attr) == -1)
         handle_error("mq_getattr");
 
-    char *buf = malloc(2048*sizeof(float));
+    char *buf = (char *)malloc(2048*sizeof(float));
     if (buf == NULL)
         handle_error("malloc");
-    double* frames = malloc(1024*sizeof(double));
+    double* frames = (double *)malloc(1024*sizeof(double));
     if (frames == NULL)
         handle_error("malloc");
     uint frames_so_far = 0;
+
+    //initializing with frame size 1024 and hop size 512
+    BTrack b;
+
     while(1){
 
         ssize_t bytes_received = mq_receive(mqd_1, buf, attr.mq_msgsize, NULL);
@@ -53,6 +75,7 @@ int main()
 		if(free_space == frames_number){
 			frames_so_far = 0;
 		//	BTrack
+                        b.processAudioFrame(frames);
 		}
 		else
 			frames_so_far += frames_number;
@@ -62,11 +85,14 @@ int main()
 			frames[frames_so_far + i] = (double)array[i];
 		uint frames_left = frames_number - free_space;
 		//BTrack
+                        b.processAudioFrame(frames);
 		for(int i=0; i < frames_left; i++)
 			frames[i] = (double)array[free_space + i];
 		frames_so_far = frames_left;
 	}
         printf("P2 got message\n");
+        if (b.beatDueInCurrentFrame())
+            printf("!!!!!!!!!!!!!!!!!!! BEAT !!!!!!!!!!!!!!!!!!!!!!\n");
 	//for(int i=0; i<1024; i++){
 	//	printf("c%d:%f ",i, frames[i]);
 	//}
