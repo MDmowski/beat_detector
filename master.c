@@ -90,7 +90,7 @@ int main()
     // Create first process
     pid_t pid = fork();
     if( pid == 0){
-        char *argv[] = {"./p1.o", "test2.wav", NULL};
+        char *argv[] = {"./p1.o", "mono.wav", NULL};
         execve("./p1.o", argv, NULL);
         handle_error("execve");
     }

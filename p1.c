@@ -19,6 +19,7 @@
     do { perror(msg); exit(EXIT_FAILURE); } while (0)
 
 mqd_t mqd_1;
+ma_event g_stopEvent;
 
 void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount)
 {
@@ -33,10 +34,17 @@ void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uin
     printf("Total frames: %d\n", frameCount);
     uint frames = ma_decoder_read_pcm_frames(pDecoder, pOutput, frameCount);
 
+
+    // Fill in new_msg
+
     if(mq_send(mqd_1, (const char *)&new_msg, sizeof(struct p1_msg), 1) == -1)
         handle_error("mq_send");
 
     (void)pInput;
+
+    if (frames < frameCount) {
+        ma_event_signal(&g_stopEvent);        
+    }
 }
 
 int main(int argc, char **argv)
@@ -70,11 +78,14 @@ int main(int argc, char **argv)
     deviceConfig.dataCallback      = data_callback;
     deviceConfig.pUserData         = &decoder;
 
+    ma_event_init(&g_stopEvent);
+
     if (ma_device_init(NULL, &deviceConfig, &device) != MA_SUCCESS) {
         printf("Failed to open playback device.\n");
         ma_decoder_uninit(&decoder);
         return -3;
     }
+
 
     if (ma_device_start(&device) != MA_SUCCESS) {
         printf("Failed to start playback device.\n");
@@ -83,8 +94,7 @@ int main(int argc, char **argv)
         return -4;
     }
 
-    printf("Press Enter to quit...");
-    getchar();
+    ma_event_wait(&g_stopEvent);
 
     ma_device_uninit(&device);
     ma_decoder_uninit(&decoder);

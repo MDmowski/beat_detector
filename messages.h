@@ -14,7 +14,9 @@ struct log_msg
 
 struct p1_msg
 {
-    float frame[1024];
+    float frame[2048];
+    int framesNumber;
+
 };
 
 struct p2_msg
