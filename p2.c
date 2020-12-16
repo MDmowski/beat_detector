@@ -105,8 +105,9 @@ int main()
         // Proccess data
 	        
         // Send new data
-        /* if(mq_send(mqd_2, (const char *)&new_msg, sizeof(struct p2_msg), 1) == -1) */
-        /*     handle_error("mq_send"); */
+        char msg = 'K';
+        if(mq_send(mqd_2, (const char *)&msg, 1, 1) == -1)
+            handle_error("mq_send");
 
         /* sleep(0.5); */
     }

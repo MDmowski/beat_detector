@@ -101,11 +101,17 @@ int main()
         handle_error("execve");
     }
 
+    pid = fork();
+    if( pid == 0){
+        execve("./p3.o", NULL, NULL);
+        handle_error("execve");
+    }
+
 
     // TODO: Add waiting for all children
     int status;
     pid_t wpid;
-    while ((wpid = wait(&status)) > 0);
+    wpid = wait(&status);
 
     mq_close(mqd_log_1);
     mq_unlink("/MSG_QUEUE_1");
