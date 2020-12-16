@@ -112,4 +112,6 @@ Projekt okazał się być dla całego zespoły sporym wyzwaniem, ale każdy z na
 
 #### Jakub Strawa
 
+
 #### Adam Szałowski
+Dużym wyzwaniem okazały się też ograniczenia sprzętowe płytki Raspberry Pi 0W. Ponieważ posiada ona tylko jeden rdzeń nie można było przypisywać poszczególnym procesom osobynych rdzeni i w ten sposób uchronić je przed "schedulerem". Jednocześnie komponenty, które wykorzystywaliśmy nie pozwalały nam zainstalować typowego systemu czasu rzeczywistego pozbawionego rdzenia linuxa. Dobrym usprawnieniem było by więc wykorzystanie płytki przeznaczonej wyłączenie do systemów czasu rzeczywistego i ewentualna komunikacją z taką płytką za pomocą raspberry.
