@@ -105,12 +105,20 @@ Naszym pierwszym krokiem było zmierzenie i porównanie opóźnień między proc
 
 ![](wykres1.png)
 
-Średnia z opóźnień: 57699,71117
-Odchylenie standardowe: 111034,4629
+Średnia z opóźnień: 57699,71117 ns
+Odchylenie standardowe: 111034,4629 ns
 
 ![](wykres2.png)
 
+Średni czas od otrzymania do wysłania wiadomości, że jest beat: 17399248,33 ns
+Odchylenie standardowe: 5730082,38 ns
+
+
 ![](wykres3.png)
+
+Średnia z opóźnień: 33372,5 ns
+Odchylenie standardowe: 16649,54297 ns
+
 
 # Potencjalne usprawnienia
 Zdecydowanie największym usprawnieniem byłoby wykorzystanie innej biblioteki niż BTrack, ponieważ pomimo dobrych założeń teoretycznych wykazuje ona często duże odchylenia od realnego tempa. Kolejnym usprawnieniem byłoby wykorzystanie mocniejszej płytki RaspberryPi oraz większej ilości diód, co pozwoliłoby nam wykonać bardziej czasochłonne obliczenia (np. wykorzystać inną bibliotekę: wolniejszą, ale dokładniejszą).
