@@ -97,6 +97,9 @@ int main()
         if (b.beatDueInCurrentFrame()){
             printf("!!!!!!!!!!!!!!!!!!! BEAT !!!!!!!!!!!!!!!!!!!!!!\n");
             printf("%f\n", b.getCurrentTempoEstimate());
+            char msg = 'K';
+            if(mq_send(mqd_2, (const char *)&msg, 1, 1) == -1)
+                handle_error("mq_send");
         }
 	//for(int i=0; i<1024; i++){
 	//	printf("c%d:%f ",i, frames[i]);
@@ -105,9 +108,6 @@ int main()
         // Proccess data
 	        
         // Send new data
-        char msg = 'K';
-        if(mq_send(mqd_2, (const char *)&msg, 1, 1) == -1)
-            handle_error("mq_send");
 
         /* sleep(0.5); */
     }
