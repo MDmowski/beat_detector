@@ -35,6 +35,11 @@ mqd_t mq_create_log_wrapper(const char *name)
 
 void mq_create_wrapper(const char* name)
 {
+    /* struct mq_attr attr; */
+    /* attr.mq_flags = 0; */
+    /* attr.mq_maxmsg = 10; */
+    /* attr.mq_msgsize = 8192; */
+    /* attr.mq_curmsgs = 0; */
     mqd_t mqd = mq_open(name, O_CREAT | O_EXCL, S_IRUSR | S_IWUSR, NULL);
     if(mqd == (mqd_t) -1)
         handle_error("mq_open");

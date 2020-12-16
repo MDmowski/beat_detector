@@ -40,7 +40,7 @@ void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uin
 
     struct log_msg log;
 
-    printf("Total frames: %d\n", frameCount);
+    /* printf("Total frames: %d\n", frameCount); */
     uint frames = ma_decoder_read_pcm_frames(pDecoder, pOutput, frameCount);
 
     if(mq_send(mqd_1, (const char *)pOutput, sizeof(float) * frames, 1) == -1)

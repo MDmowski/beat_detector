@@ -90,7 +90,7 @@ int main()
     // Create first process
     pid_t pid = fork();
     if( pid == 0){
-        char *argv[] = {"./p1.o", "mono.wav", NULL};
+        char *argv[] = {"./p1.o", "metronome120.wav", NULL};
         execve("./p1.o", argv, NULL);
         handle_error("execve");
     }
@@ -101,10 +101,17 @@ int main()
         handle_error("execve");
     }
 
+    pid = fork();
+    if( pid == 0){
+        execve("./p3.o", NULL, NULL);
+        handle_error("execve");
+    }
+
 
     // TODO: Add waiting for all children
     int status;
-    wait(&status);
+    pid_t wpid;
+    wpid = wait(&status);
 
     mq_close(mqd_log_1);
     mq_unlink("/MSG_QUEUE_1");
