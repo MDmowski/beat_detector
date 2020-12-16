@@ -12,7 +12,7 @@
 #include <signal.h>
 #include <errno.h>
 #include <sys/stat.h>
-
+#include <time.h>
 #include "messages.h"
 
 #define SAMPLE_FORMAT   ma_format_f32
@@ -24,8 +24,12 @@
 
 mqd_t mqd_1;
 ma_event g_stopEvent;
+FILE* log_file;
+struct timespec timespec;
 
 struct p1_msg new_msg;
+
+uint counter;
 
 void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount)
 {
@@ -41,7 +45,10 @@ void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uin
 
     if(mq_send(mqd_1, (const char *)pOutput, sizeof(float) * frames, 1) == -1)
         handle_error("mq_send");
-
+    clock_gettime(CLOCK_REALTIME, &timespec);
+    fprintf(log_file,"%d,%jd.%ld\n",counter, timespec.tv_sec, timespec.tv_nsec);
+    perror("file");
+    counter++;
     (void)pInput;
 
     if (frames < frameCount) {
@@ -57,6 +64,10 @@ int main(int argc, char **argv)
     if(mqd_1 == (mqd_t) -1)
         handle_error("mq_open");
 
+    log_file = fopen("p1_log.csv","a");
+    printf("%d\n",log_file);
+    if(log == NULL)
+	handle_error("open_file");
 
     printf("%s", argv[1]);
     ma_result result;
@@ -108,6 +119,6 @@ int main(int argc, char **argv)
 
     mq_close(mqd_log);
     mq_close(mqd_1);
-
+    fclose(log_file);
     printf("p1\n");
 }
