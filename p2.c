@@ -40,8 +40,8 @@ mqd_t mq_open_log_wrapper(const char *name)
 int main()
 {
     mqd_log = mq_open_log_wrapper("/LOG_MSG_QUEUE_2");
-    log_m.msg_id = 0
-    log_m.sender = 2
+    log_m.msg_id = 0;
+    log_m.sender = 2;
 
     mqd_t mqd_1 = mq_open("/MSG_QUEUE_1", O_RDONLY, S_IRUSR | S_IWUSR, NULL);
     if(mqd_1 == (mqd_t) -1)
@@ -75,7 +75,7 @@ int main()
         if(bytes_received == -1)
             handle_error("mq_receive");
 
-        log_m.type = 0
+        log_m.type = log_msg::RECEIVED;
         if(mq_send(mqd_log, (const char *)&log_m, sizeof(struct log_msg), 1) == -1)
             handle_error("mq_send");
         log_m.msg_id++;
@@ -115,7 +115,7 @@ int main()
             if(mq_send(mqd_2, (const char *)&msg, 1, 1) == -1)
                 handle_error("mq_send");
 
-            log_m.type = 1
+            log_m.type = log_msg::SENT;
             if(mq_send(mqd_log, (const char *)&log_m, sizeof(struct log_msg), 1) == -1)
                 handle_error("mq_send");
             log_m.msg_id++;

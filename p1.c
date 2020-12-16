@@ -58,9 +58,9 @@ void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uin
 int main(int argc, char **argv)
 {
     mqd_log = mq_open_log_wrapper("/LOG_MSG_QUEUE_1");
-    log_m.msg_id = 0
-    log_m.type = 1
-    log_m.sender = 1
+    log_m.msg_id = 0;
+    log_m.type = 1;
+    log_m.sender = 1;
 
     mqd_1 = mq_open("/MSG_QUEUE_1", O_WRONLY, S_IRUSR | S_IWUSR, NULL);
     if(mqd_1 == (mqd_t) -1)
