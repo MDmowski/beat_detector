@@ -128,7 +128,7 @@ Projekt okazał się być dla całego zespoły sporym wyzwaniem, ale każdy z na
 
 # Przemyślenia
 #### Maciej Dmowski
-Interesujące okazało się, żę biblioteka miniaudio nie jest w stanie wysyłać stałego rozmiaru ramek, ale jest on zależny od systemu. Jednocześnie autor w dokumentacji nie uwzględnił takiej możliwości. Z racji niedokładności wykrywania tempa dokonaliśmy licznych prób znalezienia przyczyny, jednak z braku specjalistycznej wiedzy, nie udało nam się usprawnić algorytmu.
+Interesujące okazało się, żę biblioteka miniaudio nie jest w stanie wysyłać stałego rozmiaru ramek, ale jest on zależny od systemu. Jednocześnie autor w dokumentacji nie uwzględnił takiej możliwości. Dodatkowo domyślny format dekodowania audio był niezgodny z biblioteką BTrack, więc konieczna była zmiana dekodowania z intów na floaty. Z racji niedokładności wykrywania tempa dokonaliśmy licznych prób znalezienia przyczyny, jednak z braku specjalistycznej wiedzy, nie udało nam się usprawnić algorytmu.
 
 #### Jakub Strawa
 Uważam, że największym wyzwaniem dla mnie było przygotowanie biblioteki BTrack do użycia, ponieważ okazało się, że wymaga ona kilku innych zewnętrznych bibliotek, których proces instalacyjny był bardzo skomplikowany. Sytuacji nie ułatwiła szczątkowa dokumentacja biblioteki BTrack. Dobrym usprawnieniem byłoby użycie szybszej płytki oraz innej biblioteki, ponieważ BTrack wykazuje sporo niedokładności.
