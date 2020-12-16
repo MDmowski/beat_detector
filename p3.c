@@ -25,6 +25,9 @@ int main()
         handle_error("mq_open");
 
     struct log_msg msg;
+    log_m.msg_id = 0;
+    log_m.type = 0;
+    log_m.sender = 3;
 
     struct mq_attr attr;
     if (mq_getattr(mqd_2, &attr) == -1)
@@ -38,19 +41,18 @@ int main()
     pinMode (7, OUTPUT) ;
 
     while(1){
-
             
         ssize_t bytes_received = mq_receive(mqd_2, buf, 8192, NULL);
         if(bytes_received == -1)
             handle_error("mq_receive");
 
-        printf("P3 got message\n");
-
+        if(mq_send(mqd_log, (const char *)&log_m, sizeof(struct log_msg), 1) == -1)
+            handle_error("mq_send");
+        log_m.msg_id++;
 
         digitalWrite (7, HIGH) ; delay (50) ;
         digitalWrite (7,  LOW);
 
-        // Proccess data
         
     }
 
