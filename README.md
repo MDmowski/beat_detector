@@ -101,6 +101,14 @@ Jeśli zaś zauważymy, że narzut czasowy związany z kopiowaniem danych do i z
 # Przeprowadzone ekspermenty
 Naszym pierwszym krokiem było zmierzenie i porównanie opóźnień między procesami, co wykonane zosatło przy użyciu dokładnych czasów podawanych do kolejek komunikatów wiadomości dla każdego procesu. Już na wczesnym etapie testowania zauważyliśmy, że program uruchomiony na RaspberryPi nie wykazuje znaczących opóźnień. Analiza opóźnień dla poszczególnych procesów przedstawiona jest na wykresie poniżej. 
 
+### Wykresy
+
+![](wykres1.png)
+
+![](wykres2.png)
+
+![](wykres3.png)
+
 # Potencjalne usprawnienia
 Zdecydowanie największym usprawnieniem byłoby wykorzystanie innej biblioteki niż BTrack, ponieważ pomimo dobrych założeń teoretycznych wykazuje ona często duże odchylenia od realnego tempa. Kolejnym usprawnieniem byłoby wykorzystanie mocniejszej płytki RaspberryPi oraz większej ilości diód, co pozwoliłoby nam wykonać bardziej czasochłonne obliczenia (np. wykorzystać inną bibliotekę: wolniejszą, ale dokładniejszą).
 
