@@ -105,6 +105,9 @@ Naszym pierwszym krokiem było zmierzenie i porównanie opóźnień między proc
 
 ![](wykres1.png)
 
+Średnia z opóźnień: 57699,71117
+Odchylenie standardowe: 111034,4629
+
 ![](wykres2.png)
 
 ![](wykres3.png)
