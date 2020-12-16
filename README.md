@@ -9,7 +9,7 @@ Projekt realizowany w ramach przdmiotu SCZR (realizacja 20Z) przez zespół:
 - Adam Szałowski
 
 # Opis projektu
-Projekt jest systemem czasu rzeczywistego realizującym obsługę oraz anlizę plików audio. Poszczególne procesy działają zgodnie z diagramem oraz szczegółowym opisem poniżej. Projekt przy pomocy RPI odtwarza oraz analizuje na bieżąco plik audio, wyświetlając przy pomocy diód LED tempo (BPM) oraz spektrogram. Techniczne szczegóły implementacji opisane są w dalszych sekcjach tego pliku.
+Projekt jest systemem czasu rzeczywistego realizującym obsługę oraz anlizę plików audio. Poszczególne procesy działają zgodnie z diagramem oraz szczegółowym opisem poniżej. Projekt przy pomocy RPI odtwarza oraz analizuje na bieżąco plik audio, wyświetlając przy pomocy diód LED tempo (BPM). Techniczne szczegóły implementacji opisane są w dalszych sekcjach tego pliku.
 
 # Link do repozytorium
 https://gitlab-stud.elka.pw.edu.pl/jstrawa/projekt-sczr
@@ -36,7 +36,7 @@ Ma za zadanie przeanalizować otrzymane dane aby wykryć rytm muzyki. Następnie
 1. Odbiera ramki pliku z kolejki komunikatów
 2. Wyznacza rytm korzystając z szybkiej tranformaty Fouriera
 3. Na podstawie wyliczenia ustala czy obecna ramka jest częścią rytmu i jeśli jest to przekazuje taką informację do procesu 3
-4. Przekazuje do procesu 3 ramki audio. (jeśli będzie tworzona wizualizacja dźwięku)
+4. Przekazuje do procesu 3 sygnał o tym czy wykryty został beat w przetwarzanej ramce
 
 ## Proces 3
 Ma za zadanie wyświetlić otrzymane dane o rytmie na diodzie LED.
@@ -97,3 +97,19 @@ Komunikacja między procesami odbywać się będzie za pomocą kolejek komunikat
 # Planowane eksprymenty
 Początkowo zakładamy brak jakiejkolwiek ingerencji w sposób działania systemu. Pierwszym eksperymentem będzie zatem porównanie działania diody do rzeczywistego słyszalnego tempa. Zmierzone opóźnienia wykorzystamy do określenia jakości synchronizacji. Uzyskane w ten sposób dane porównamy z danymi uzyskanymi z logów otrzymywanych przez zarządcę procesów. Następnym krokiem będzie próba dostrojenia systemu (zmniejszenia opóźnień) poprzez dobór priorytetów dla procesów metodą eksperymentalną. Dla każdej takiej próby wykonany zostanie eksperyment mający na celu jakość dostrojenia. Jeśli zaś ta metoda. zawiedzie, kolejnym planowanym eksperymentem będzie przydzielenie każdemu procesowi własny rdzeń procesora. Następnie powtórzony zostanie eksperyment polegający na porównaniu działania diody do słyszalnego tempa.
 Jeśli zaś zauważymy, że narzut czasowy związany z kopiowaniem danych do i z kolejki komunikatów będzie duży, przetestujemy przekazywanie danych przez pamięć współdzieloną.
+
+# Przeprowadzone ekspermenty
+Naszym pierwszym krokiem było zmierzenie i porównanie opóźnień między procesami, co wykonane zosatło przy użyciu dokładnych czasów podawanych do kolejek komunikatów wiadomości dla każdego procesu. Już na wczesnym etapie testowania zauważyliśmy, że program uruchomiony na RaspberryPi nie wykazuje znaczących opóźnień. Analiza opóźnień dla poszczególnych procesów przedstawiona jest na wykresie poniżej. 
+
+# Potencjalne usprawnienia
+Zdecydowanie największym usprawnieniem byłoby wykorzystanie innej biblioteki niż BTrack, ponieważ pomimo dobrych założeń teoretycznych wykazuje ona często duże odchylenia od realnego tempa. Kolejnym usprawnieniem byłoby wykorzystanie mocniejszej płytki RaspberryPi oraz większej ilości diód, co pozwoliłoby nam wykonać bardziej czasochłonne obliczenia (np. wykorzystać inną bibliotekę: wolniejszą, ale dokładniejszą).
+
+# Wnioski
+Projekt okazał się być dla całego zespoły sporym wyzwaniem, ale każdy z nas z przekonaniem stwierdził, że realizacja tego projektu pozwoliła mu znacząco poszerzyć swoją wiedzę na temat działania oraz tworzenia systemów czasu rzeczywistego.
+
+# Przemyślenia
+#### Maciej Dmowski
+
+#### Jakub Strawa
+
+#### Adam Szałowski
