@@ -9,7 +9,7 @@ p1.o: p1.c
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) $(AUDIOFLAGS)
 
 p3.o: p3.c
-	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS)
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS) -lwiringPi
 
 p2.o: p2unlinked.o BTrack.o OnsetDetectionFunction.o kiss_fft.o samplerate.o src_sinc.o src_zoh.o src_linear.o
 	g++ -g -Wall -o p2.o  p2unlinked.o BTrack.o OnsetDetectionFunction.o kiss_fft.o samplerate.o src_sinc.o src_zoh.o src_linear.o -lrt $(LDFLAGS) $(AUDIOFLAGS)

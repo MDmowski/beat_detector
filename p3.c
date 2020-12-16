@@ -11,6 +11,7 @@
 #include <sys/stat.h>
 
 #include "messages.h"
+#include <wiringPi.h>
 
 #define handle_error(msg) \
     do { perror(msg); exit(EXIT_FAILURE); } while (0)
@@ -33,6 +34,8 @@ int main()
     if (buf == NULL)
         handle_error("malloc");
 
+    wiringPiSetup () ;
+    pinMode (7, OUTPUT) ;
 
     while(1){
 
@@ -44,6 +47,8 @@ int main()
         printf("P3 got message\n");
 
 
+        digitalWrite (7, HIGH) ; delay (50) ;
+        digitalWrite (7,  LOW);
 
         // Proccess data
         
