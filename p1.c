@@ -36,11 +36,17 @@ void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uin
 
     struct log_msg log;
 
-    printf("Total frames: %d\n", frameCount);
+    /* printf("Total frames: %d\n", frameCount); */
     uint frames = ma_decoder_read_pcm_frames(pDecoder, pOutput, frameCount);
 
     if(mq_send(mqd_1, (const char *)pOutput, sizeof(float) * frames, 1) == -1)
         handle_error("mq_send");
+
+    /* float* s = (float *)pOutput; */
+    /* for(int i = 0; i < frames; i++){ */
+    /*     printf("%f ", s[i]); */
+    /* } */
+    /* printf("\n\n"); */
 
     (void)pInput;
 

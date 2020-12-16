@@ -64,14 +64,17 @@ int main()
 
     while(1){
 
-        ssize_t bytes_received = mq_receive(mqd_1, buf, attr.mq_msgsize, NULL);
+        /* printf("MSG size: %d\n", attr.mq_msgsize); */
+        ssize_t bytes_received = mq_receive(mqd_1, buf, 2048*sizeof(float), NULL);
+        if(bytes_received == -1)
+            handle_error("mq_receive");
 	uint frames_number = bytes_received/sizeof(float);
 	float* array = (float*)buf;
         printf("P2 bytes: %d\n", bytes_received);
 	uint free_space = 1024 - frames_so_far;
 	if(free_space >= frames_number){
 		for(int i=0; i < frames_number; i++)
-			frames[frames_so_far + i] = (double)array[i];
+			frames[frames_so_far + i] = ((double)array[i]);
 		if(free_space == frames_number){
 			frames_so_far = 0;
 		//	BTrack
@@ -82,17 +85,19 @@ int main()
 	}
 	else{
 		for(int i=0; i < free_space; i++)
-			frames[frames_so_far + i] = (double)array[i];
+			frames[frames_so_far + i] = ((double)array[i]);
 		uint frames_left = frames_number - free_space;
 		//BTrack
                         b.processAudioFrame(frames);
 		for(int i=0; i < frames_left; i++)
-			frames[i] = (double)array[free_space + i];
+			frames[i] = ((double)array[free_space + i]);
 		frames_so_far = frames_left;
 	}
         printf("P2 got message\n");
-        if (b.beatDueInCurrentFrame())
+        if (b.beatDueInCurrentFrame()){
             printf("!!!!!!!!!!!!!!!!!!! BEAT !!!!!!!!!!!!!!!!!!!!!!\n");
+            printf("%f\n", b.getCurrentTempoEstimate());
+        }
 	//for(int i=0; i<1024; i++){
 	//	printf("c%d:%f ",i, frames[i]);
 	//}
