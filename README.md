@@ -105,19 +105,30 @@ Naszym pierwszym krokiem było zmierzenie i porównanie opóźnień między proc
 
 ![](wykres1.png)
 
+Średnia z opóźnień: 57699,71117 ns
+Odchylenie standardowe: 111034,4629 ns
+
 ![](wykres2.png)
 
+Średni czas od otrzymania do wysłania wiadomości, że jest beat: 17399248,33 ns
+Odchylenie standardowe: 5730082,38 ns
+
+
 ![](wykres3.png)
+
+Średnia z opóźnień: 33372,5 ns
+Odchylenie standardowe: 16649,54297 ns
+
 
 # Potencjalne usprawnienia
 Zdecydowanie największym usprawnieniem byłoby wykorzystanie innej biblioteki niż BTrack, ponieważ pomimo dobrych założeń teoretycznych wykazuje ona często duże odchylenia od realnego tempa. Kolejnym usprawnieniem byłoby wykorzystanie mocniejszej płytki RaspberryPi oraz większej ilości diód, co pozwoliłoby nam wykonać bardziej czasochłonne obliczenia (np. wykorzystać inną bibliotekę: wolniejszą, ale dokładniejszą).
 
 # Wnioski
-Projekt okazał się być dla całego zespoły sporym wyzwaniem, ale każdy z nas z przekonaniem stwierdził, że realizacja tego projektu pozwoliła mu znacząco poszerzyć swoją wiedzę na temat działania oraz tworzenia systemów czasu rzeczywistego.
+Projekt okazał się być dla całego zespoły sporym wyzwaniem, ale każdy z nas z przekonaniem stwierdził, że realizacja tego projektu pozwoliła mu znacząco poszerzyć swoją wiedzę na temat działania oraz tworzenia systemów czasu rzeczywistego. Zauważyliśmy, że opóźnienie związane z przesyłaniem i odbieraniem ramek do kolejek komunikatów jest znacznie mniejsze niż opóźnienie wynikające z przeprowadzania szybkiej transformaty fouriera i wyznaczania rytmu.
 
 # Przemyślenia
 #### Maciej Dmowski
-Interesujące okazało się, żę biblioteka miniaudio nie jest w stanie wysyłać stałego rozmiaru ramek, ale jest on zależny od systemu. Jednocześnie autor w dokumentacji nie uwzględnił takiej możliwości. Z racji niedokładności wykrywania tempa dokonaliśmy licznych prób znalezienia przyczyny, jednak z braku specjalistycznej wiedzy, nie udało nam się usprawnić algorytmu.
+Interesujące okazało się, żę biblioteka miniaudio nie jest w stanie wysyłać stałego rozmiaru ramek, ale jest on zależny od systemu. Jednocześnie autor w dokumentacji nie uwzględnił takiej możliwości. Dodatkowo domyślny format dekodowania audio był niezgodny z biblioteką BTrack, więc konieczna była zmiana dekodowania z intów na floaty. Z racji niedokładności wykrywania tempa dokonaliśmy licznych prób znalezienia przyczyny, jednak z braku specjalistycznej wiedzy, nie udało nam się usprawnić algorytmu.
 
 #### Jakub Strawa
 Uważam, że największym wyzwaniem dla mnie było przygotowanie biblioteki BTrack do użycia, ponieważ okazało się, że wymaga ona kilku innych zewnętrznych bibliotek, których proces instalacyjny był bardzo skomplikowany. Sytuacji nie ułatwiła szczątkowa dokumentacja biblioteki BTrack. Dobrym usprawnieniem byłoby użycie szybszej płytki oraz innej biblioteki, ponieważ BTrack wykazuje sporo niedokładności.
