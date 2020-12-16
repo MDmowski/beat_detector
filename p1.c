@@ -24,7 +24,6 @@
 
 mqd_t mqd_1;
 ma_event g_stopEvent;
-FILE* log_file;
 struct timespec timespec;
 
 struct p1_msg new_msg;
@@ -37,6 +36,7 @@ void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uin
     if (pDecoder == NULL) {
         return;
     }
+    FILE* log_file = fopen("p1_send.csv","a");
 
     struct log_msg log;
 
@@ -47,7 +47,7 @@ void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uin
         handle_error("mq_send");
     clock_gettime(CLOCK_REALTIME, &timespec);
     fprintf(log_file,"%d,%jd.%ld\n",counter, timespec.tv_sec, timespec.tv_nsec);
-    perror("file");
+    fclose(log_file);
     counter++;
     (void)pInput;
 
@@ -63,11 +63,6 @@ int main(int argc, char **argv)
     mqd_1 = mq_open("/MSG_QUEUE_1", O_WRONLY, S_IRUSR | S_IWUSR, NULL);
     if(mqd_1 == (mqd_t) -1)
         handle_error("mq_open");
-
-    log_file = fopen("p1_log.csv","a");
-    printf("%d\n",log_file);
-    if(log == NULL)
-	handle_error("open_file");
 
     printf("%s", argv[1]);
     ma_result result;
@@ -119,6 +114,5 @@ int main(int argc, char **argv)
 
     mq_close(mqd_log);
     mq_close(mqd_1);
-    fclose(log_file);
     printf("p1\n");
 }

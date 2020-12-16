@@ -32,6 +32,8 @@ mqd_t mq_open_log_wrapper(const char *name)
 
     return mqd;
 }
+struct timespec timespec;
+int r_counter, s_counter;
 
 int main()
 {
@@ -68,6 +70,11 @@ int main()
         ssize_t bytes_received = mq_receive(mqd_1, buf, 2048*sizeof(float), NULL);
         if(bytes_received == -1)
             handle_error("mq_receive");
+	clock_gettime(CLOCK_REALTIME, &timespec);
+	FILE* receive_log_file = fopen("p2_receive.csv","a");
+    	fprintf(receive_log_file,"%d,%jd.%ld\n",r_counter, timespec.tv_sec, timespec.tv_nsec);
+	fclose(receive_log_file);
+	r_counter++;
 	uint frames_number = bytes_received/sizeof(float);
 	float* array = (float*)buf;
         printf("P2 bytes: %d\n", bytes_received);
@@ -100,6 +107,11 @@ int main()
             char msg = 'K';
             if(mq_send(mqd_2, (const char *)&msg, 1, 1) == -1)
                 handle_error("mq_send");
+	clock_gettime(CLOCK_REALTIME, &timespec);
+	FILE* send_log_file = fopen("p2_send.csv","a");
+    	fprintf(send_log_file,"%d,%jd.%ld\n",s_counter, timespec.tv_sec, timespec.tv_nsec);
+	fclose(send_log_file);
+	s_counter++;
         }
 	//for(int i=0; i<1024; i++){
 	//	printf("c%d:%f ",i, frames[i]);

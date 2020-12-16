@@ -15,6 +15,9 @@
 #define handle_error(msg) \
     do { perror(msg); exit(EXIT_FAILURE); } while (0)
 
+struct timespec timespec;
+int counter;
+
 int main()
 {
     mqd_t mqd_log = mq_open_log_wrapper("/LOG_MSG_QUEUE_3");
@@ -40,10 +43,14 @@ int main()
         ssize_t bytes_received = mq_receive(mqd_2, buf, 8192, NULL);
         if(bytes_received == -1)
             handle_error("mq_receive");
-
+	clock_gettime(CLOCK_REALTIME, &timespec);
+	FILE* receive_log_file = fopen("p3_receive.csv","a");
+    	fprintf(receive_log_file,"%d,%jd.%ld\n",counter, timespec.tv_sec, timespec.tv_nsec);
+	fclose(receive_log_file);
+	counter++;
         printf("P3 got message\n");
 
-
+	
 
         // Proccess data
         
