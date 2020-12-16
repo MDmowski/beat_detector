@@ -23,9 +23,11 @@
     do { perror(msg); exit(EXIT_FAILURE); } while (0)
 
 mqd_t mqd_1;
+mqd_t mqd_log;
 ma_event g_stopEvent;
 
 struct p1_msg new_msg;
+struct log_msg log_m;
 
 void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount)
 {
@@ -34,7 +36,6 @@ void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uin
         return;
     }
 
-    struct log_msg log;
 
     /* printf("Total frames: %d\n", frameCount); */
     uint frames = ma_decoder_read_pcm_frames(pDecoder, pOutput, frameCount);
@@ -42,11 +43,10 @@ void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uin
     if(mq_send(mqd_1, (const char *)pOutput, sizeof(float) * frames, 1) == -1)
         handle_error("mq_send");
 
-    /* float* s = (float *)pOutput; */
-    /* for(int i = 0; i < frames; i++){ */
-    /*     printf("%f ", s[i]); */
-    /* } */
-    /* printf("\n\n"); */
+    if(mq_send(mqd_log, (const char *)&log_m, sizeof(struct log_msg), 1) == -1)
+        handle_error("mq_send");
+
+    log_m.msg_id++;
 
     (void)pInput;
 
@@ -57,7 +57,10 @@ void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uin
 
 int main(int argc, char **argv)
 {
-    mqd_t mqd_log = mq_open_log_wrapper("/LOG_MSG_QUEUE_1");
+    mqd_log = mq_open_log_wrapper("/LOG_MSG_QUEUE_1");
+    log_m.msg_id = 0
+    log_m.type = 1
+    log_m.sender = 1
 
     mqd_1 = mq_open("/MSG_QUEUE_1", O_WRONLY, S_IRUSR | S_IWUSR, NULL);
     if(mqd_1 == (mqd_t) -1)

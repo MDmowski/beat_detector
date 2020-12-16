@@ -56,7 +56,9 @@ static void read_msg(union sigval sv)
         // To read contents of struct we have to cast it to appropiate type
         log_msg_buf = (struct log_msg *) buf;
 
-        // Simple log, delete later
+        // Do logging here
+        // For now disabled
+
         printf("Read %zd bytes from MQ: %u\n", bytes_received, log_msg_buf->sender);
     }
 

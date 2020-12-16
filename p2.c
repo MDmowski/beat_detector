@@ -10,11 +10,13 @@
 #include <errno.h>
 #include <sys/stat.h>
 
-/* #include "messages.h" */
+/* #include "messages.h" */ // Cant include bcz C++
 #include "BTrack/BTrack.h"
 
 #define handle_error(msg) \
     do { perror(msg); exit(EXIT_FAILURE); } while (0)
+
+mqd_t mqd_log;
 
 struct log_msg
 {
@@ -23,6 +25,8 @@ struct log_msg
     struct timeval tv;
     enum MsgType {RECEIVED, SENT} type;
 };
+
+struct log_msg log_m;
 
 mqd_t mq_open_log_wrapper(const char *name)
 {
@@ -35,7 +39,9 @@ mqd_t mq_open_log_wrapper(const char *name)
 
 int main()
 {
-    mqd_t mqd_log = mq_open_log_wrapper("/LOG_MSG_QUEUE_2");
+    mqd_log = mq_open_log_wrapper("/LOG_MSG_QUEUE_2");
+    log_m.msg_id = 0
+    log_m.sender = 2
 
     mqd_t mqd_1 = mq_open("/MSG_QUEUE_1", O_RDONLY, S_IRUSR | S_IWUSR, NULL);
     if(mqd_1 == (mqd_t) -1)
@@ -68,6 +74,14 @@ int main()
         ssize_t bytes_received = mq_receive(mqd_1, buf, 2048*sizeof(float), NULL);
         if(bytes_received == -1)
             handle_error("mq_receive");
+
+        log_m.type = 0
+        if(mq_send(mqd_log, (const char *)&log_m, sizeof(struct log_msg), 1) == -1)
+            handle_error("mq_send");
+        log_m.msg_id++;
+
+
+
 	uint frames_number = bytes_received/sizeof(float);
 	float* array = (float*)buf;
         printf("P2 bytes: %d\n", bytes_received);
@@ -100,6 +114,11 @@ int main()
             char msg = 'K';
             if(mq_send(mqd_2, (const char *)&msg, 1, 1) == -1)
                 handle_error("mq_send");
+
+            log_m.type = 1
+            if(mq_send(mqd_log, (const char *)&log_m, sizeof(struct log_msg), 1) == -1)
+                handle_error("mq_send");
+            log_m.msg_id++;
         }
 	//for(int i=0; i<1024; i++){
 	//	printf("c%d:%f ",i, frames[i]);
