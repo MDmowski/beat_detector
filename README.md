@@ -124,7 +124,7 @@ Odchylenie standardowe: 16649,54297 ns
 Zdecydowanie największym usprawnieniem byłoby wykorzystanie innej biblioteki niż BTrack, ponieważ pomimo dobrych założeń teoretycznych wykazuje ona często duże odchylenia od realnego tempa. Kolejnym usprawnieniem byłoby wykorzystanie mocniejszej płytki RaspberryPi oraz większej ilości diód, co pozwoliłoby nam wykonać bardziej czasochłonne obliczenia (np. wykorzystać inną bibliotekę: wolniejszą, ale dokładniejszą).
 
 # Wnioski
-Projekt okazał się być dla całego zespoły sporym wyzwaniem, ale każdy z nas z przekonaniem stwierdził, że realizacja tego projektu pozwoliła mu znacząco poszerzyć swoją wiedzę na temat działania oraz tworzenia systemów czasu rzeczywistego.
+Projekt okazał się być dla całego zespoły sporym wyzwaniem, ale każdy z nas z przekonaniem stwierdził, że realizacja tego projektu pozwoliła mu znacząco poszerzyć swoją wiedzę na temat działania oraz tworzenia systemów czasu rzeczywistego. Zauważyliśmy, że opóźnienie związane z przesyłaniem i odbieraniem ramek do kolejek komunikatów jest znacznie mniejsze niż opóźnienie wynikające z przeprowadzania szybkiej transformaty fouriera i wyznaczania rytmu.
 
 # Przemyślenia
 #### Maciej Dmowski
