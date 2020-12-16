@@ -39,7 +39,7 @@ Ma za zadanie przeanalizować otrzymane dane aby wykryć rytm muzyki. Następnie
 4. Przekazuje do procesu 3 ramki audio. (jeśli będzie tworzona wizualizacja dźwięku)
 
 ## Proces 3
-Ma za zadanie wyświetlić otrzymane dane o rytmie na diodzie LED. Jeśli obciążenie byłoby zbyt małe, dodatkowe zadanie: stworzyć wizualizację dźwięku.
+Ma za zadanie wyświetlić otrzymane dane o rytmie na diodzie LED.
 
 # Synchronizacja
 Proces 2 i 3 oczekują na komunikaty od procesów 1 i 2. Procesy są zawieszane do czasu pojawienia się komunikatu.
@@ -53,18 +53,14 @@ Komunikacja między procesami odbywać się będzie za pomocą kolejek komunikat
     Przesył buforu próbek dzwiękowych.
     Struktura wiadomości:
     ```c
-        struct msg_buf_12 {
-            unsigned int id;
-            data;
-        } 
+        float frames[2048];
     ```
 2. message_queue_23
     Przesył wykrytego rytmu.
     Struktura wiadomości:
     ```c
         struct msg_buf_23 {
-            unsigned int id;
-            data;
+            char msg;
         }
  
     ```
@@ -95,7 +91,7 @@ Komunikacja między procesami odbywać się będzie za pomocą kolejek komunikat
 * Konfiguracja RPI
 * Przygotowanie i przesłanie odpowiednich sygnałów na diody
 * Zaprojektowanie układu elektrycznego łączego diody z urządzeniem
-* Przeprowadzenie eksperymentów
+* Utworzenie kolejek wiadomości
 
 
 # Planowane eksprymenty
