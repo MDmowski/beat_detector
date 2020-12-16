@@ -120,15 +120,6 @@ int main()
                 handle_error("mq_send");
             log_m.msg_id++;
         }
-	//for(int i=0; i<1024; i++){
-	//	printf("c%d:%f ",i, frames[i]);
-	//}
-	//printf("\n\n");
-        // Proccess data
-	        
-        // Send new data
-
-        /* sleep(0.5); */
     }
 
     mq_close(mqd_log);
